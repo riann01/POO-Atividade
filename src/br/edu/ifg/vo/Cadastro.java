@@ -48,6 +48,7 @@ public class Cadastro {
                     }
                 }
                 funcionario.setCodigo(codigo);
+                contador = 0;
                 System.out.println("Entre com o nome do funcionário:");
                 String nome;
                 while((nome = ler.readLine()).length() < 4) {
@@ -63,7 +64,7 @@ public class Cadastro {
                 contador = 0;
                 while(flagIdade) {
                     ++contador;
-                    if (contador == 4) {
+                    if (contador >= 4) {
                         System.out.println("Cadastro cancelado, muitas tentativas realizadas.");
                         return 0;
                     }
@@ -77,10 +78,9 @@ public class Cadastro {
                         flagIdade = true;
                         ++contador;
                     }
-                    contador = 0;
                     while(idade < 18) {
                         ++contador;
-                        if (contador == 4) {
+                        if (contador >= 4) {
                             System.out.println("Cadastro cancelado, muitas tentativas realizadas.");
                             return 0;
                         }
@@ -159,7 +159,6 @@ public class Cadastro {
         }
         return 0;
     }
-    //
     public int cadastrarSetor() {
         setor = new Setor();
         contador = 0;
@@ -221,6 +220,7 @@ public class Cadastro {
             }
         }
     }
+    
     public int listarSetorEspecifico() throws IOException {
         int codigo = -1;
         boolean flagSetor = false;
