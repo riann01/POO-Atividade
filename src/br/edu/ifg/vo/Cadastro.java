@@ -135,11 +135,12 @@ public class Cadastro {
                     String n;
                     contador = 0;
                     while(!((n = ler.readLine()).equalsIgnoreCase("s") || n.equalsIgnoreCase("n"))) {
-                        if (contador == 5) {
+                        if (contador == 4) {
                             System.out.println("Cadastro cancelado, muitas tentativas.");
                             return 0;
                         }
                         System.out.println("Entre somente com uma opção válida (S/n)");
+                        ++contador;
                     }
                     if (n.equalsIgnoreCase("s")) {
                         funcionario.setSetor(setor);
@@ -147,7 +148,6 @@ public class Cadastro {
                     }
                     else {
                         flag = true;
-                        ++contador;
                     }
                 }
                 funcionarios.add(funcionario);
@@ -223,6 +223,7 @@ public class Cadastro {
     }
     public int listarSetorEspecifico() throws IOException {
         int codigo = -1;
+        boolean flagSetor = false;
         if (setores.isEmpty()) {
             System.out.println("O cadastro de setores está vazio, impossível listar.");
         }
@@ -230,8 +231,7 @@ public class Cadastro {
             boolean flagCodigo = true;
             contador = 0;
             while(flagCodigo) {
-                ++contador;
-                if (contador == 5) {
+                if (contador == 4) {
                     System.out.println("Operação cancelada, muitas tentativas.");
                     return 0;
                 }
@@ -244,13 +244,18 @@ public class Cadastro {
                     System.out.println("Tipo de dado inválido. O tipo permitido para esse campo é inteiro.");
                     flagCodigo = true;
                 }
+                ++contador;
             }
             for (int i = 0; i < setores.size(); i++) {
                 if (codigo == setores.get(i).getCodigo()) {
                     System.out.printf("Setor %s\n" , i+1);
                     System.out.printf("Código: %s\n" , setores.get(i).getCodigo());
                     System.out.printf("Nome: %s\n" , setores.get(i).getNome());
+                    flagSetor = true;
                 }
+            }
+            if (!flagSetor) {
+                System.out.println("Nenhum resultado encontrado para o código " + codigo + ".");
             }
         }
         return 0;
@@ -281,7 +286,7 @@ public class Cadastro {
             boolean flagCodigo = true;
             contador = 0;
             while(flagCodigo) {
-                if (contador == 5) {
+                if (contador == 4) {
                     System.out.println("Operação cancelada, muitas tentativas.");
                     return 0;
                 }
@@ -293,6 +298,7 @@ public class Cadastro {
                 catch (NumberFormatException e) {
                     System.out.println("Tipo de dado inválido. O tipo permitido para esse campo é inteiro.");
                     flagCodigo = true;
+                    ++contador;
                 }
             }
             System.out.println("Lista de Fincionários:");
@@ -307,7 +313,7 @@ public class Cadastro {
                     flagFunc = true;
                 }
                 if (!flagFunc) {
-                    System.out.println("Nenhum resultado encontrado.");
+                    System.out.println("Nenhum resultado encontrado para o código " + codigo + ".");
                 }
             }
         }
@@ -325,8 +331,8 @@ public class Cadastro {
                 contador = 0;
                 while(flagFunc) {
                     ++contador;
-                    if (contador == 5) {
-                        System.out.println("Operação cancelada, muitas tentativas.");
+                    if (contador == 4) {
+                        System.out.println("Operação cancelada, muitas tentativas realizadas.");
                         return 0;
                     }
                     System.out.println("Entre com o código do funcionário:");
@@ -337,9 +343,14 @@ public class Cadastro {
                     catch(NumberFormatException e) {
                         System.out.println("Tipo de dado inválido. O tipo permitido para esse campo é inteiro.");
                         flagFunc = true;
+                        ++contador;
                     }
-                    funcionario = pegaFuncionario(codigo);
-                    while (funcionario == null) {
+                    while ((funcionario = pegaFuncionario(codigo)) == null) {
+                        ++contador;
+                        if (contador == 6) {
+                            System.out.println("Operação cancelada, muitas tentativas realizadas.");
+                            return 0;
+                        }
                         System.out.println("Código inválido. Entre com um código válido");
                         try {
                             codigo = Integer.parseInt(ler.readLine());
@@ -349,7 +360,6 @@ public class Cadastro {
                             System.out.println("Tipo de dado inválido. O tipo permitido para esse campo é inteiro.");
                             flagFunc = true;
                         }
-                        funcionario = pegaFuncionario(codigo);
                     }
                 }
                 funcionarios.remove(funcionario);
